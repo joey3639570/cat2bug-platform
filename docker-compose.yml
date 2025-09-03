@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # MySQL 資料庫
+  mysql:
+    image: mysql:8.0
+    container_name: cat2bug-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: cat2bug123
+      MYSQL_DATABASE: cat2bug_platform
+      MYSQL_USER: cat2bug
+      MYSQL_PASSWORD: cat2bug123
+      TZ: Asia/Taipei
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/cat2bug_platform.sql:/docker-entrypoint-initdb.d/cat2bug_platform.sql:ro
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - cat2bug-network
+
+  # Redis 快取
+  redis:
+    image: redis:7-alpine
+    container_name: cat2bug-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass cat2bug123
+    networks:
+      - cat2bug-network
+
+  # Cat2Bug 應用
+  cat2bug-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cat2bug-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # 資料庫設定
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cat2bug_platform?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: cat2bug
+      SPRING_DATASOURCE_PASSWORD: cat2bug123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      
+      # Redis 設定
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: cat2bug123
+      SPRING_REDIS_DATABASE: 0
+      
+      # 應用設定
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+      
+      # 檔案上傳路徑
+      CAT2BUG_PROFILE: /app/uploadPath
+      CAT2BUG_TEMP: /app/uploadTemp
+      
+      # JVM 設定
+      JAVA_OPTS: "-Xms512m -Xmx1024m -Djava.security.egd=file:/dev/./urandom"
+    volumes:
+      - app_uploads:/app/uploadPath
+      - app_temp:/app/uploadTemp
+      - app_logs:/app/logs
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - cat2bug-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  app_uploads:
+    driver: local
+  app_temp:
+    driver: local
+  app_logs:
+    driver: local
+
+networks:
+  cat2bug-network:
+    driver: bridge

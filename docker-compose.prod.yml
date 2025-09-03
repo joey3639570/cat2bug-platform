@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # MySQL 資料庫
+  mysql:
+    image: mysql:8.0
+    container_name: cat2bug-mysql-prod
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Cat2Bug@2025!}
+      MYSQL_DATABASE: cat2bug_platform
+      MYSQL_USER: cat2bug
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Cat2Bug@2025!}
+      TZ: Asia/Taipei
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data_prod:/var/lib/mysql
+      - ./sql/cat2bug_platform.sql:/docker-entrypoint-initdb.d/cat2bug_platform.sql:ro
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - cat2bug-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis 快取
+  redis:
+    image: redis:7-alpine
+    container_name: cat2bug-redis-prod
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data_prod:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:-Cat2Bug@2025!}
+    networks:
+      - cat2bug-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Cat2Bug 應用
+  cat2bug-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cat2bug-app-prod
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      # 資料庫設定
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cat2bug_platform?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: cat2bug
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-Cat2Bug@2025!}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      
+      # Redis 設定
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD:-Cat2Bug@2025!}
+      SPRING_REDIS_DATABASE: 0
+      
+      # 應用設定
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+      
+      # 檔案上傳路徑
+      CAT2BUG_PROFILE: /app/uploadPath
+      CAT2BUG_TEMP: /app/uploadTemp
+      
+      # JVM 設定（生產環境優化）
+      JAVA_OPTS: "-Xms1024m -Xmx2048m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Djava.security.egd=file:/dev/./urandom"
+    volumes:
+      - app_uploads_prod:/app/uploadPath
+      - app_temp_prod:/app/uploadTemp
+      - app_logs_prod:/app/logs
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - cat2bug-network-prod
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  # Nginx 反向代理（可選）
+  nginx:
+    image: nginx:alpine
+    container_name: cat2bug-nginx-prod
+    restart: unless-stopped
+    ports:
+      - "${NGINX_PORT:-80}:80"
+      - "${NGINX_SSL_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - app_uploads_prod:/var/www/uploads:ro
+    depends_on:
+      - cat2bug-app
+    networks:
+      - cat2bug-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mysql_data_prod:
+    driver: local
+  redis_data_prod:
+    driver: local
+  app_uploads_prod:
+    driver: local
+  app_temp_prod:
+    driver: local
+  app_logs_prod:
+    driver: local
+
+networks:
+  cat2bug-network-prod:
+    driver: bridge
