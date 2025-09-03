@@ -1,65 +1,65 @@
 <div align="center"><img src="readme/images/logo.png" style="width: 300px;" /></div>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Cat2Bug-Platform v0.5.1</h1>
-<h4 align="center">轻量化智能BUG管理平台</h4>
+<h4 align="center">輕量化智慧BUG管理平台</h4>
 
-## 平台简介
+## 平台簡介
 
-Cat2Bug-Platform是一套永久免费开源的Bug管理平台，可以完全私有化部署，它利用目前比较流行的AI大数据模型技术作为辅助，快速提升软件管理的质量，我们将毫无保留给个人及团体免费使用。
-它的使用人群锁定个人或中小型软件开发团队，Cat2Bug的理念是免去了项目管理中各种重度管理，让个人或团队可以快速上手，把控软件质量。
-平台采用JAVA+VUE前后台分离模式开发，支持在各系统平台部署使用。
+Cat2Bug-Platform是一套永久免費開源的Bug管理平台，可以完全私有化部署，它利用目前比較流行的AI大資料模型技術作為輔助，快速提升軟體管理的品質，我們將毫無保留給個人及團體免費使用。
+它的使用人群鎖定個人或中小型軟體開發團隊，Cat2Bug的理念是免去了專案管理中各種重度管理，讓個人或團隊可以快速上手，把控軟體品質。
+平台採用JAVA+VUE前後台分離模式開發，支援在各系統平台部署使用。
 
-## 内置功能
+## 內建功能
 
-1.  仪表盘：统计缺陷、成员、计划信息。
-2.  团队管理：管理团队中的项目、成员。
-3.  项目管理：管理项目中的缺陷、成员。
-4.  用例管理：管理测试用例
-5.  缺陷管理：管理BUG、需求、任务。
-6.  交付物管理：维护项目中的可交付物品。
-7.  报告管理：显示团队、项目、测试用例、缺陷、交付物等的相关数据指标。
-8.  API管理：用于管理API接口密钥
-9.  文档管理：留备项目中所用到的各种文档
-10.  通知管理：发送系统业务通知到系统内部、邮件、钉钉等平台中。
+1.  儀表板：統計缺陷、成員、計劃資訊。
+2.  團隊管理：管理團隊中的專案、成員。
+3.  專案管理：管理專案中的缺陷、成員。
+4.  用例管理：管理測試用例
+5.  缺陷管理：管理BUG、需求、任務。
+6.  交付物管理：維護專案中的可交付物品。
+7.  報告管理：顯示團隊、專案、測試用例、缺陷、交付物等的相關資料指標。
+8.  API管理：用於管理API介面金鑰
+9.  文件管理：留備專案中所用到的各種文件
+10.  通知管理：發送系統業務通知到系統內部、電子郵件、釘釘等平台中。
 
-## 最新版本更新说明
+## 最新版本更新說明
 
-当前最新版本是0.5.1
+當前最新版本是0.5.1
 
-* 添加仪表盘;
-* 在测试用例中添加按级别查找功能;
-* 在测试计划中添加取消通过功能;
-* 在admin账户中添加权限管理;
-* 修复系统功能BUG;
+* 新增儀表板;
+* 在測試用例中新增按級別查詢功能;
+* 在測試計劃中新增取消通過功能;
+* 在admin帳戶中新增權限管理;
+* 修復系統功能BUG;
 
 ## 特色
 
-* 开源私有化AI+BUG系统部署;
-* 通过AI技术自动生成测试用例并录入到系统，解决费时费力录入用例的痛点;
-* 已测试平台为生态中心，衍生多种缺陷监控测试框架，可以一站式解决软件生产运维中的诸多痛点；
-* 自主研发报告模版，可轻松、快速、动态的生成项目所需管理及交付文档，较免管理人员编写文档的时间成本;
-* 专注于软件的缺陷的跟踪管理，简单直接，即开即用，减少学习成本；
+* 開源私有化AI+BUG系統部署;
+* 透過AI技術自動產生測試用例並錄入到系統，解決費時費力錄入用例的痛點;
+* 以測試平台為生態中心，衍生多種缺陷監控測試框架，可以一站式解決軟體生產維運中的諸多痛點；
+* 自主研發報告範本，可輕鬆、快速、動態的產生專案所需管理及交付文件，較免管理人員編寫文件的時間成本;
+* 專注於軟體的缺陷的追蹤管理，簡單直接，即開即用，減少學習成本；
 
-## 在线体验
+## 線上體驗
 
-- 体验账号：demo
-- 体验密码：123456
+- 體驗帳號：demo
+- 體驗密碼：123456
 
 演示地址：[https://www.cat2bug.com:8022](https://www.cat2bug.com:8022)
 
-## 关联产品
+## 關聯產品
 
-| 名称                                                       | 类型       | 说明                                                                |
+| 名稱                                                       | 類型       | 說明                                                                |
 |----------------------------------------------------------|----------|:------------------------------------------------------------------|
-| [Cat2Bug-JUnit](https://gitee.com/cat2bug/cat2bug-junit) | 单元测试框架   | 自动化单元测试框架，目前可以自动扫描Controller接口，随机提供参数测试，并将测试报告提交到Cat2Bug-Platform |
-| [Cat2Bug-JLog](https://gitee.com/cat2bug/cat2bug-jlog)   | 错误日志采集框架 | 获取项目中的异常日志，并将日志报告提交到Cat2Bug-Platform                              |
+| [Cat2Bug-JUnit](https://gitee.com/cat2bug/cat2bug-junit) | 單元測試框架   | 自動化單元測試框架，目前可以自動掃描Controller介面，隨機提供參數測試，並將測試報告提交到Cat2Bug-Platform |
+| [Cat2Bug-JLog](https://gitee.com/cat2bug/cat2bug-jlog)   | 錯誤日誌採集框架 | 取得專案中的異常日誌，並將日誌報告提交到Cat2Bug-Platform                              |
 
-## 系统架构
+## 系統架構
 
-![系统架构](readme/images/cat2bug-platform-framework.png)
+![系統架構](readme/images/cat2bug-platform-framework.png)
 
-## 技术选型
+## 技術選型
 
-1. 系统环境
+1. 系統環境
 
 * Java EE 11
 * Servlet 3.0
@@ -71,61 +71,75 @@ Cat2Bug-Platform是一套永久免费开源的Bug管理平台，可以完全私�
 * Spring Framework 5.2.x
 * Spring Security 5.2.x
 
-3. 持久层
+3. 持久層
 
 * Apache MyBatis 3.5.x
 * Hibernate Validation 6.0.x
 * Alibaba Druid 1.2.x
 
-4. 视图层
+4. 視圖層
 
 * Vue 2.6.x
 * Axios 0.21.x
 * Element 2.15.x
 
-## 模块
+## 模組
 
 ````
 --cat2bug-platform
-------|----cat2bug-platform-admin       # 主程序模块
-------|----cat2bug-platform-ai          # 人工智能模块
-------|----cat2bug-platform-im          # 通讯模块
-------|----cat2bug-platform-api         # Open API模块
-------|----cat2bug-platform-common      # 通用模块
-------|----cat2bug-platform-framework   # 系统框架
-------|----cat2bug-platform-generator   # 代码生成
-------|----cat2bug-platform-quartz      # 定时任务
-------|----cat2bug-platform-system      # 业务模块
+------|----cat2bug-platform-admin       # 主程式模組
+------|----cat2bug-platform-ai          # 人工智慧模組
+------|----cat2bug-platform-im          # 通訊模組
+------|----cat2bug-platform-api         # Open API模組
+------|----cat2bug-platform-common      # 通用模組
+------|----cat2bug-platform-framework   # 系統框架
+------|----cat2bug-platform-generator   # 程式碼產生
+------|----cat2bug-platform-quartz      # 定時任務
+------|----cat2bug-platform-system      # 業務模組
 ------|----cat2bug-platform-ui          # 前端VUE工程
-------|----sql                          # 数据库文件
-------|----readme                       # 文档
+------|----sql                          # 資料庫檔案
+------|----readme                       # 文件
 ````
 
 ## 部署
 
-### 手动命令行部署
+### 手動命令列部署
 
-手动部署需要提前安装Java 11环境，并下载cat2bug-platform发行版程序，执行命令如下：
+手動部署需要提前安裝Java 11環境，並下載cat2bug-platform發行版程式，執行命令如下：
 
 ```shell
 nohup java -jar cat2bug-platform-0.5.1.jar>/dev/null 2>&1 &
 ```
 
-### Docker单容器部署
+### Docker單容器部署
 
-以下提供的是Docker官网容器化的部署方案，执行命令如下：
+以下提供的是Docker官網容器化的部署方案，執行命令如下：
 
 ```docker
 docker run -it -d -p 8022:8022 --name cat2bug-platform qyzw-docker.pkg.coding.net/cat2bug/cat2bug-platform/single:latest
 ```
 
-部署成功后，打开浏览器访问[http://127.0.0.1:8022](http://127.0.0.1:8022),在登陆页面自行注册账号登陆使用即可。
+部署成功後，開啟瀏覽器造訪[http://127.0.0.1:8022](http://127.0.0.1:8022),在登入頁面自行註冊帳號登入使用即可。
 
-注意：系统管理员账号：admin    密码：cat2bug，此账号用于管理注册用户。
+注意：系統管理員帳號：admin    密碼：cat2bug，此帳號用於管理註冊使用者。
 
-此部署方式为单容器最精简方式部署，数据库默认采用嵌入式H2，多用于小型或临时性项目的缺陷管理，如需Mysql或多容器部署方案，请查看[官网文档](https://www.cat2bug.com/download/cat2bug-platform/#%E9%83%A8%E7%BD%B2)。
+此部署方式為單容器最精簡方式部署，資料庫預設採用嵌入式H2，多用於小型或臨時性專案的缺陷管理，如需Mysql或多容器部署方案，請查看[官網文件](https://www.cat2bug.com/download/cat2bug-platform/#%E9%83%A8%E7%BD%B2)。
 
-## 演示图
+### Docker Compose 部署
+
+本專案已提供完整的 Docker Compose 部署方案，支援開發和生產環境：
+
+```bash
+# 開發環境
+docker-compose up -d
+
+# 生產環境
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+詳細部署說明請參考 [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)
+
+## 演示圖
 
 <table>
     <tr>
@@ -146,13 +160,13 @@ docker run -it -d -p 8022:8022 --name cat2bug-platform qyzw-docker.pkg.coding.ne
     </tr>
 </table>
 
-## 未来计划
+## 未來計劃
 
-目前Cat2Bug还在持续成长中，后续我们将在测试工具、自动化、AI几个方向持续投入，完善平台的功能。2025计划如下：
+目前Cat2Bug還在持續成長中，後續我們將在測試工具、自動化、AI幾個方向持續投入，完善平台的功能。2025計劃如下：
 
-* cat2bug-platform: 功能叠加，完善系统统计管理功能；
-* cat2bug-app：提供移动端APP；
-* cat2bug-cloud：cat2bug云平台的建设；
+* cat2bug-platform: 功能疊加，完善系統統計管理功能；
+* cat2bug-app：提供行動端APP；
+* cat2bug-cloud：cat2bug雲平台的建設；
 
 ## Cat2Bug交流群
 
