@@ -35,9 +35,6 @@ COPY cat2bug-platform-quartz/pom.xml ./cat2bug-platform-quartz/
 COPY cat2bug-platform-system/pom.xml ./cat2bug-platform-system/
 COPY cat2bug-platform-ai/pom.xml ./cat2bug-platform-ai/
 
-# 下載依賴（利用 Docker 層快取）
-RUN mvn dependency:go-offline -B
-
 # 複製所有原始碼
 COPY . .
 
