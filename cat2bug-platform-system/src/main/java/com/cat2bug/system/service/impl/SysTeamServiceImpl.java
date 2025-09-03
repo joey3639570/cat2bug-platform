@@ -20,7 +20,7 @@ import com.cat2bug.system.service.ISysTeamService;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 团队Service业务层处理
+ * 團隊Service業務層處理
  * 
  * @author yuzhantao
  * @date 2023-11-13
@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SysTeamServiceImpl implements ISysTeamService 
 {
-    /** 创建人角色ID */
+    /** 建立人角色ID */
     private final static Long TEAM_CREATE_BY_ROLE_ID = 12L;
 
     @Autowired
@@ -50,10 +50,10 @@ public class SysTeamServiceImpl implements ISysTeamService
     private SysUserTeamRoleMapper sysUserTeamRoleMapper;
 
     /**
-     * 查询团队
+     * 查詢團隊
      * 
-     * @param teamId 团队主键
-     * @return 团队
+     * @param teamId 團隊主鍵
+     * @return 團隊
      */
     @Override
     public SysTeam selectSysTeamByTeamId(Long teamId)
@@ -62,10 +62,10 @@ public class SysTeamServiceImpl implements ISysTeamService
     }
 
     /**
-     * 查询团队列表
+     * 查詢團隊列表
      * 
-     * @param sysTeam 团队
-     * @return 团队集合
+     * @param sysTeam 團隊
+     * @return 團隊集合
      */
     @Override
     public List<SysTeam> selectSysTeamList(SysTeam sysTeam)
@@ -74,9 +74,9 @@ public class SysTeamServiceImpl implements ISysTeamService
     }
 
     /**
-     * 查询团队列表
-     * @param userId    用户id
-     * @return  团队集合
+     * 查詢團隊列表
+     * @param userId    使用者id
+     * @return  團隊集合
      */
     @Override
     public List<SysTeam> selectSysTeamListByUserId(Long userId) {
@@ -84,13 +84,13 @@ public class SysTeamServiceImpl implements ISysTeamService
     }
 
     /**
-     * 查询团队列表
-     * @param teamId    团队id
-     * @return          成员集合
+     * 查詢團隊列表
+     * @param teamId    團隊id
+     * @return          成員集合
      */
     @Override
     public List<SysUser> selectSysUserListByTeamIdAndSysUser(Long teamId, SysUser sysUser) {
-        // 处理排除用户的逻辑代码
+        // 處理排除使用者的邏輯程式碼
         if(sysUser.getParams()!=null && Strings.isNotBlank((String)sysUser.getParams().get("excludeMembers"))){
             String strExcludeMembers = String.valueOf(sysUser.getParams().get("excludeMembers"));
             sysUser.getParams().put("excludeMembers",strExcludeMembers.split(","));
@@ -116,7 +116,7 @@ public class SysTeamServiceImpl implements ISysTeamService
             sysUserTeam.setCreateBy(String.valueOf(SecurityUtils.getUserId()));
             Preconditions.checkState(sysUserTeamMapper.insertSysUserTeam(sysUserTeam)==1,MessageUtils.message("team.insert_user_team_role_fail"));
 
-            // 新建团队内的用户角色
+            // 新建團隊內的使用者角色
             if(batchUserRoleVo.getRoleIds()!=null){
                 for(Long roleId : batchUserRoleVo.getRoleIds()){
                     SysUserTeamRole utr = new SysUserTeamRole();
@@ -130,10 +130,10 @@ public class SysTeamServiceImpl implements ISysTeamService
     }
 
     /**
-     * 新增团队
+     * 新增團隊
      * 
-     * @param sysTeam 团队
-     * @return 结果
+     * @param sysTeam 團隊
+     * @return 結果
      */
     @Override
     @Transactional
@@ -141,18 +141,18 @@ public class SysTeamServiceImpl implements ISysTeamService
     {
         Preconditions.checkNotNull(sysTeam.getTeamName(),MessageUtils.message("team.insert_team_name_cannot_empty"));
 
-        // 检测团队名称是否已经使用
+        // 檢測團隊名稱是否已經使用
         SysTeam selectSysTeam = sysTeamMapper.selectSysTeamByTeamName(sysTeam.getTeamName());
         Preconditions.checkState(selectSysTeam==null,MessageUtils.message("team.insert_team_name_duplicate"));
 
-        // 新建团队数据
+        // 新建團隊資料
         sysTeam.setCreateTime(DateUtils.getNowDate());
         sysTeam.setCreateBy(SecurityUtils.getUsername());
         sysTeam.setCreateById(SecurityUtils.getUserId());
         Preconditions.checkState(sysTeamMapper.insertSysTeam(sysTeam)==1, MessageUtils.message("team.insert_team_fail"));
 
-        // 新建用户与团队关联数据
-        String createById = SecurityUtils.getUserId().toString(); // 获取当前登陆用户id
+        // 新建使用者與團隊關聯資料
+        String createById = SecurityUtils.getUserId().toString(); // 取得當前登入使用者id
         SysUserTeam sysUserTeam = new SysUserTeam();
         sysUserTeam.setUserId(SecurityUtils.getUserId());
         sysUserTeam.setTeamId(sysTeam.getTeamId());
@@ -160,13 +160,13 @@ public class SysTeamServiceImpl implements ISysTeamService
         sysUserTeam.setCreateBy(createById);
         Preconditions.checkState(sysUserTeamMapper.insertSysUserTeam(sysUserTeam)==1,MessageUtils.message("team.insert_user_team_role_fail"));
 
-        // 新建用户角色
+        // 新建使用者角色
         SysUserTeamRole sysUserTeamRole = new SysUserTeamRole();
         sysUserTeamRole.setRoleId(TEAM_CREATE_BY_ROLE_ID);
         sysUserTeamRole.setUserTeamId(sysUserTeam.getUserTeamId());
         Preconditions.checkState(sysUserTeamRoleMapper.insertSysUserTeamRole(sysUserTeamRole)==1,MessageUtils.message("team.insert_user_team_role_fail"));
 
-        // 查询用户配置，如果没有默认团队，就将当前团队设置为默认团队
+        // 查詢使用者配置，如果沒有預設團隊，就將當前團隊設定為預設團隊
         SysUserConfig sysUserConfig = sysUserConfigMapper.selectSysUserConfigByUserId(SecurityUtils.getUserId());
         if(sysUserConfig==null){
             sysUserConfig = new SysUserConfig();
@@ -174,7 +174,7 @@ public class SysTeamServiceImpl implements ISysTeamService
             sysUserConfig.setUserId(SecurityUtils.getUserId());
             sysUserConfigMapper.insertSysUserConfig(sysUserConfig);
         } else if(sysUserConfig.getCurrentTeamId()==null){
-            // 设置当前团队id，并更新数据库
+            // 設定當前團隊id，並更新資料庫
             sysUserConfig.setCurrentTeamId(sysTeam.getTeamId());
             sysUserConfigMapper.updateSysUserConfig(sysUserConfig);
         }
@@ -191,12 +191,12 @@ public class SysTeamServiceImpl implements ISysTeamService
             throw new RuntimeException(MessageUtils.message("user.create.fail.phone-exists",user.getNickName(), user.getPhoneNumber()));
         }
 
-        // 插入用户信息
+        // 插入使用者資訊
         user.setCreateBy(SecurityUtils.getUsername());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         Preconditions.checkState(sysUserMapper.insertUser(user)==1,MessageUtils.message("user.insert_user_fail"));
 
-        // 新建用户与团队关联数据
+        // 新建使用者與團隊關聯資料
         SysUserTeam sysUserTeam = new SysUserTeam();
         sysUserTeam.setUserId(user.getUserId());
         sysUserTeam.setTeamId(teamId);
@@ -204,7 +204,7 @@ public class SysTeamServiceImpl implements ISysTeamService
         sysUserTeam.setCreateBy(String.valueOf(SecurityUtils.getUsername()));
         Preconditions.checkState(sysUserTeamMapper.insertSysUserTeam(sysUserTeam)==1,MessageUtils.message("team.insert_user_team_role_fail"));
 
-        // 新建团队内的用户角色
+        // 新建團隊內的使用者角色
         if(user.getRoleIds()!=null){
             for(Long roleId : user.getRoleIds()){
                 SysUserTeamRole utr = new SysUserTeamRole();
