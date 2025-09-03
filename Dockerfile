@@ -67,8 +67,9 @@ RUN addgroup -g 1000 appgroup && \
 # 從構建階段複製 JAR 檔案
 COPY --from=backend-builder /app/cat2bug-platform-admin/target/cat2bug-admin.jar app.jar
 
-# 從前端構建階段複製靜態檔案到後端資源目錄
-COPY --from=frontend-builder /app/frontend/dist ./static/
+# 從前端構建階段複製靜態檔案到運行映像的 static 目錄
+# 注意：前端構建輸出目錄由 vue.config.js 設為 ../cat2bug-platform-admin/src/main/resources/static
+COPY --from=frontend-builder /app/cat2bug-platform-admin/src/main/resources/static ./static/
 
 # 建立上傳目錄
 RUN mkdir -p uploadPath uploadTemp logs && \
