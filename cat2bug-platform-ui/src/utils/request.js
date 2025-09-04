@@ -90,14 +90,17 @@ service.interceptors.response.use(res => {
     if (code === 401) {
       if (!isRelogin.show) {
         isRelogin.show = true;
-        MessageBox.confirm(i18n.t('http.login-expired').toString(), i18n.t('prompted').toString(), { confirmButtonText: i18n.t('login-again').toString(), cancelButtonText: i18n.t('cancel').toString(), type: 'warning' }).then(() => {
-          isRelogin.show = false;
-          store.dispatch('LogOut').then(() => {
-            location.href = '/index';
+        MessageBox.confirm(i18n.t('http.login-expired').toString(), i18n.t('prompted').toString(), { confirmButtonText: i18n.t('login-again').toString(), cancelButtonText: i18n.t('cancel').toString(), type: 'warning' })
+          .then(() => {
+            isRelogin.show = false;
+            // 客端登出避免重複呼叫 /logout 造成重複提交提示
+            store.dispatch('FedLogOut').then(() => {
+              location.href = '/login';
+            })
           })
-        }).catch(() => {
-          isRelogin.show = false;
-        });
+          .catch(() => {
+            isRelogin.show = false;
+          });
       }
       return Promise.reject(i18n.t('http.invalid-session'))
     } else if (code === 500) {

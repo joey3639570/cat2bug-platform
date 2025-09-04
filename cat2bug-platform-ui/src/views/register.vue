@@ -44,7 +44,7 @@
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
+      <el-form-item prop="code" v-if="false">
         <el-input
           v-model="registerForm.code"
           auto-complete="off"
@@ -126,25 +126,15 @@ export default {
           {required: true, trigger: "blur", message: this.$i18n.t('please-enter-your-password-again')},
           {required: true, validator: equalToPassword, trigger: "blur"}
         ],
-        code: [{required: true, trigger: "blur", message: this.$i18n.t('please-enter-verification-code')}]
+        code: []
       },
       loading: false,
-      captchaEnabled: true
+      captchaEnabled: false
     };
   },
-  created() {
-    this.getCode();
-  },
+  created() {},
   methods: {
-    getCode() {
-      getCodeImg().then(res => {
-        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.registerForm.uuid = res.uuid;
-        }
-      });
-    },
+    getCode() {},
     handleRegister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
