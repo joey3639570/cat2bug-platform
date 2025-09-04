@@ -38,6 +38,9 @@ COPY cat2bug-platform-ai/pom.xml ./cat2bug-platform-ai/
 # 複製所有原始碼
 COPY . .
 
+# 將前端構建輸出放入後端資源目錄，隨 Spring Boot JAR 打包進入 classpath
+COPY --from=frontend-builder /app/cat2bug-platform-admin/src/main/resources/static ./cat2bug-platform-admin/src/main/resources/static
+
 # 構建後端應用
 RUN mvn clean package -DskipTests -pl cat2bug-platform-admin -am
 
@@ -64,10 +67,10 @@ RUN addgroup -g 1000 appgroup && \
 # 從構建階段複製 JAR 檔案（注意 backend 工作目錄為 /app/backend）
 COPY --from=backend-builder /app/backend/cat2bug-platform-admin/target/cat2bug-admin.jar app.jar
 
+
 # 從前端構建階段複製靜態檔案到後端資源目錄
 # 注意：前端構建輸出目錄由 vue.config.js 設為 ../cat2bug-platform-admin/src/main/resources/static
 # 在 Docker 構建環境中，實際路徑為 /app/frontend/../cat2bug-platform-admin/src/main/resources/static
-COPY --from=frontend-builder /app/cat2bug-platform-admin/src/main/resources/static ./src/main/resources/static/
 
 # 建立上傳目錄
 RUN mkdir -p uploadPath uploadTemp logs && \

@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: cat2bug123
       TZ: Asia/Taipei
     ports:
-      - "3306:3306"
+      - "29300:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./sql/cat2bug_platform.sql:/docker-entrypoint-initdb.d/cat2bug_platform.sql:ro
@@ -25,7 +25,7 @@ services:
     container_name: cat2bug-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "29301:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes --requirepass cat2bug123
@@ -40,7 +40,7 @@ services:
     container_name: cat2bug-app
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "29302:8080"
     environment:
       # 資料庫設定（啟用 mysql 設定檔，並覆蓋 Druid 主庫連線）
       SPRING_PROFILES_ACTIVE: mysql
