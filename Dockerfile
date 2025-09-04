@@ -66,6 +66,7 @@ COPY --from=backend-builder /app/backend/cat2bug-platform-admin/target/cat2bug-a
 
 # 從前端構建階段複製靜態檔案到後端資源目錄
 # 注意：前端構建輸出目錄由 vue.config.js 設為 ../cat2bug-platform-admin/src/main/resources/static
+# 在 Docker 構建環境中，實際路徑為 /app/frontend/../cat2bug-platform-admin/src/main/resources/static
 COPY --from=frontend-builder /app/cat2bug-platform-admin/src/main/resources/static ./src/main/resources/static/
 
 # 建立上傳目錄
