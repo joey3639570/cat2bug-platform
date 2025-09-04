@@ -30,7 +30,7 @@
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
+      <el-form-item prop="code" v-if="false">
         <el-input
           v-model="loginForm.code"
           auto-complete="off"
@@ -98,11 +98,11 @@ export default {
         password: [
           { required: true, trigger: "blur", message: this.$i18n.t('please-enter-your-account') }
         ],
-        code: [{ required: true, trigger: "change", message: this.$i18n.t('please-enter-verification-code') }]
+        code: []
       },
       loading: false,
-      // 验证码开关
-      captchaEnabled: true,
+      // 验证码開關（關閉）
+      captchaEnabled: false,
       // 注册开关
       register: true,
       redirect: undefined
@@ -119,15 +119,7 @@ export default {
     this.getCookie();
   },
   methods: {
-    getCode() {
-      getCodeImg().then(res => {
-        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.loginForm.uuid = res.uuid;
-        }
-      });
-    },
+    getCode() {},
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
