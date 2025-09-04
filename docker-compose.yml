@@ -44,10 +44,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # 資料庫設定
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cat2bug_platform?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-      SPRING_DATASOURCE_USERNAME: cat2bug
-      SPRING_DATASOURCE_PASSWORD: cat2bug123
+      # 資料庫設定（啟用 mysql 設定檔，並覆蓋 Druid 主庫連線）
+      SPRING_PROFILES_ACTIVE: mysql
+      SPRING_DATABASE_TYPE: mysql
+      SPRING_DATASOURCE_DRUID_MASTER_URL: jdbc:mysql://mysql:3306/cat2bug_platform?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_DRUID_MASTER_USERNAME: cat2bug
+      SPRING_DATASOURCE_DRUID_MASTER_PASSWORD: cat2bug123
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       
       # Redis 設定
@@ -58,7 +60,6 @@ services:
       
       # 應用設定
       SERVER_PORT: 8080
-      SPRING_PROFILES_ACTIVE: prod
       
       # 檔案上傳路徑
       CAT2BUG_PROFILE: /app/uploadPath
